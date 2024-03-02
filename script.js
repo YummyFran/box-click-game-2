@@ -3,7 +3,7 @@ const
     ctx = canvas.getContext('2d')
 
 let
-    sprite
+    sprite, trigger = false
 
 const setSize = () => {
     canvas.width = window.innerWidth
@@ -13,7 +13,7 @@ const setSize = () => {
 const init = () => {
     setSize()
     sprite = new Sprite(75)
-    animate()
+    sprite.draw()
 }
 
 const animate = () => {
@@ -23,6 +23,10 @@ const animate = () => {
 }
 
 const handleClick = e => {
+    if(!trigger){
+        trigger = true
+        animate()
+    }
     sprite.clicked(e.clientX, e.clientY)
 }
 
@@ -30,12 +34,12 @@ class Sprite {
     constructor(r) {
         this.r = r
         this.x = canvas.width * 0.5
-        this.y = canvas.height * 0.4
+        this.y = canvas.height * 0.5
         this.dy = 1
     }
 
     update() {
-        this.dy += 0.5
+        this.dy += 0.4
 
         this.y += this.dy
         this.draw()
@@ -57,7 +61,7 @@ class Sprite {
         if(!this.isBound(x, y)) return
 
         if(this.dy >= 0)
-            this.dy = -this.dy * 1.005
+            this.dy = -10
     }
 }
 
