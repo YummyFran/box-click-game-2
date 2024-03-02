@@ -39,16 +39,17 @@ const
     },
 
     handleClick = e => {
-        if(!trigger){
-            trigger = true
-            animation = requestAnimationFrame(animate)
-        }
-
         if(gameOver && stopper) {
             clearScreen()
             cancelAnimationFrame(animate)
             init()
         } else sprite.clicked(e.clientX, e.clientY)
+
+        if(!trigger && sprite.isBound()){
+            animation = requestAnimationFrame(animate)
+            trigger = true
+        }
+
     },
 
     gameOverScreen = () => {
@@ -76,13 +77,31 @@ class Sprite {
         this.r = r
         this.x = canvas.width * 0.5
         this.y = canvas.height * 0.5
+        
         this.dy = 1
+        this.dx = 0
+
+        this.gravity = 0.45
+        this.friction = 0.99
+
+        this.pointX
+        this.pointY
+        this.contactX
+        this.contactY
     }
 
     update() {
-        this.dy += 0.4
-
+        this.dy += this.gravity * this.friction
+        this.dx = -this.contactX / (this.r / 5)
+        
         this.y += this.dy
+        this.x += this.dx
+
+        if(this.x + this.r >= canvas.width || this.x - this.r <= 0) {
+            this.dx *= -1
+            this.contactX *= -1
+        }
+        
         this.draw()
 
         if(this.y - this.r > canvas.height) gameOver = true
@@ -95,18 +114,28 @@ class Sprite {
         ctx.fill()
     }
 
-    isBound(x, y) {
-        let distance = Math.sqrt(Math.pow(x - this.x, 2) + Math.pow(y - this.y, 2))
+    clicked(x, y) {
+        this.pointX = x
+        this.pointY = y
+
+        if(!this.isBound()) return
+        
+        if(this.dy >= 0) {
+            this.calculateContact()
+            let res = 6 + (this.contactY / (this.r * 2)) * 6
+            this.dy = -res
+            scorer.value++
+        }
+    }
+
+    isBound() {
+        let distance = Math.sqrt(Math.pow(this.pointX - this.x, 2) + Math.pow(this.pointY - this.y, 2))
         return distance <= this.r
     }
 
-    clicked(x, y) {
-        if(!this.isBound(x, y)) return
-
-        if(this.dy >= 0) {
-            this.dy = -10
-            scorer.value++
-        }
+    calculateContact() {
+        this.contactX = this.pointX - this.x
+        this.contactY = this.pointY - this.y + this.r
     }
 }
 
@@ -123,8 +152,6 @@ class Score {
     }
 }
 
-
-
 addEventListener('DOMContentLoaded', init)
 addEventListener('resize',  setSize)
-addEventListener('click', handleClick)
+addEventListener('mousedown', handleClick)
