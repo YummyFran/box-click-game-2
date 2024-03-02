@@ -122,7 +122,7 @@ class Sprite {
         
         if(this.dy >= 0) {
             this.calculateContact()
-            let res = 6 + (this.contactY / (this.r * 2)) * 8
+            let res = 10 + (this.contactY / (this.r * 2)) * 4
             this.dy = -res
             scorer.value++
         }
