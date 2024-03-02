@@ -109,7 +109,7 @@ class Sprite {
 
     draw() {
         ctx.beginPath()
-        ctx.fillStyle = '#E1AFD1'
+        ctx.fillStyle = '#9290C3'
         ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2)
         ctx.fill()
     }
@@ -147,7 +147,7 @@ class Score {
     draw() {
         ctx.font = '800 64px Arial'
         ctx.textAlign = 'center'
-        ctx.fillStyle = '#AD88C6'
+        ctx.fillStyle = '#535C91'
         ctx.fillText(this.value, canvas.width / 2,  100)
     }
 }
