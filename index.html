@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Box Clicker 2</title>
     <style>
+        :root {
+            --primary: #1B1A55;
+            --highlight: color-mix(in srgb, var(--primary), white 10%);
+        }
         * {
             margin: 0;
             padding: 0;
@@ -13,12 +17,26 @@
 
         canvas {
             display: block;
-            background-image: radial-gradient(#1B1A55, #070F2B );
+            background-image: radial-gradient(var(--highlight), var(--primary));
+        }
+
+        label, input {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            width: 2rems;
+            aspect-ratio: 1;
+            color: white;
+        }
+        input {
+            opacity: 0;
         }
     </style>
 </head>
 <body>
     <canvas id="canvas"></canvas>
+    <label for="color">⚙️</label>
+    <input type="color" id="color">
     <script src="script.js"></script>
 </body>
 </html>
