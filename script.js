@@ -3,7 +3,7 @@ const
     ctx = canvas.getContext('2d')
 
 let
-    sprite, scorer, animation,
+    sprite, scorer, animation, highlightColor,
     trigger = false, stopper = false, gameOver = false
 
 const
@@ -76,6 +76,8 @@ const
         document.documentElement.style.setProperty('--primary', e.target.value)
 
         const color = getHighlightColor(e.target.value)
+
+        highlightColor = color
 
         sprite.setColor(color)
         scorer.setColor(color)
@@ -164,7 +166,7 @@ class Sprite {
         this.contactX
         this.contactY
 
-        this.color = '#9290C3'
+        this.color = highlightColor || '#535C91'
     }
 
     update() {
@@ -223,7 +225,7 @@ class Sprite {
 class Score {
     constructor() {
         this.value = 0
-        this.color = '#535C91'
+        this.color = highlightColor || '#535C91'
     }
 
     draw() {
